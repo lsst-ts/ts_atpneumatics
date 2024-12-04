@@ -167,8 +167,6 @@ class PneumaticsSimulator(attcpip.AtSimulator):
         assert cell_load > 0
         self.m1_pressure = m1_pressure
         self.m2_pressure = m2_pressure
-        await self._write_evt(evt_id=Event.M1SETPRESSURE, pressure=self.m1_pressure)
-        await self._write_evt(evt_id=Event.M2SETPRESSURE, pressure=self.m2_pressure)
         self.m1_covers_close_time = m1_covers_close_time
         self.m1_covers_open_time = m1_covers_open_time
         self.cell_vents_close_time = cell_vents_close_time
@@ -193,6 +191,8 @@ class PneumaticsSimulator(attcpip.AtSimulator):
         * powerStatus
         """
         self.e_stop = False
+        await self._write_evt(evt_id=Event.M1SETPRESSURE, pressure=self.m1_pressure)
+        await self._write_evt(evt_id=Event.M2SETPRESSURE, pressure=self.m2_pressure)
         await self._write_evt(evt_id=Event.ESTOP, triggered=self.e_stop)
         await self.set_cell_vents_events(closed=True, opened=False)
         await self.set_m1_cover_events(closed=True, opened=False)
