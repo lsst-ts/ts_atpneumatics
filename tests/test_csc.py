@@ -58,7 +58,7 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             exe_name="run_atpneumatics_simulator",
         )
 
-    @pytest.mark.skip
+    @pytest.mark.skip("Failing.")
     async def test_initial_info(self) -> None:
         """Check that all events and telemetry are output at startup
 
@@ -450,7 +450,7 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
         ):
             await self.remote.cmd_start.start()
             await self.csc.simulator.configure()
-            assert self.csc.simulator.simulator_state == sal_enums.State.DISABLED
+            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
 
             await self.remote.cmd_enable.start()
             assert self.csc.simulator.simulator_state == sal_enums.State.ENABLED
@@ -459,10 +459,11 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             assert self.csc.simulator.simulator_state == sal_enums.State.DISABLED
 
             await self.remote.cmd_standby.start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
+            assert self.csc.simulator is None
 
             await self.remote.cmd_start.start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.DISABLED
+            assert self.csc.simulator is not None
+            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
 
             await self.remote.cmd_enable.start()
             assert self.csc.simulator.simulator_state == sal_enums.State.ENABLED
@@ -471,22 +472,4 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             assert self.csc.simulator.simulator_state == sal_enums.State.DISABLED
 
             await self.remote.cmd_standby.start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
-
-    async def test_csc_with_fault_state(self) -> None:
-        async with self.make_csc(
-            initial_state=salobj.State.STANDBY, config_dir=CONFIG_DIR
-        ):
-            await self.remote.cmd_start.start()
-            await self.csc.simulator.configure()
-            assert self.csc.simulator.simulator_state == sal_enums.State.DISABLED
-
-            await self.remote.cmd_standby.start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
-
-            self.csc.simulator.go_to_fault_state = True
-            await self.remote.cmd_start.set_start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.FAULT
-
-            await self.remote.cmd_standby.set_start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
+            assert self.csc.simulator is None

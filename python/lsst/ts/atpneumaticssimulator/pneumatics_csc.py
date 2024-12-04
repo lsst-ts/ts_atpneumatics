@@ -90,89 +90,144 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
                 cmd_evt_port=self.config.cmd_evt_port,
                 telemetry_port=self.config.telemetry_port,
             )
+            await self.simulator.configure()
         await super().start_clients()
 
     async def do_closeInstrumentAirValve(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("closeInstrumentAirValve")
-        command_issued = await self.write_command(
-            command=Command.CLOSE_INSTRUMENT_AIR_VALE
+        await self.cmd_closeInstrumentAirValve.ack_in_progress(
+            data, self.cmd_done_timeout
         )
-        await command_issued.done
+        self.log.debug("Sending closeInstrumentAirValve.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(
+                command=Command.CLOSE_INSTRUMENT_AIR_VALE
+            )
+            await command_issued.done
 
     async def do_closeM1CellVents(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("closeM1CellVents")
-        command_issued = await self.write_command(command=Command.CLOSE_M1_CELL_VENTS)
-        await command_issued.done
+        await self.cmd_closeM1CellVents.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending closeM1CellVents.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(
+                command=Command.CLOSE_M1_CELL_VENTS
+            )
+            await command_issued.done
 
     async def do_closeM1Cover(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("closeM1Cover")
-        command_issued = await self.write_command(command=Command.CLOSE_M1_COVER)
-        await command_issued.done
+        await self.cmd_closeM1Cover.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending closeM1Cover.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(command=Command.CLOSE_M1_COVER)
+            await command_issued.done
 
     async def do_closeMasterAirSupply(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("closeMasterAirSupply")
-        command_issued = await self.write_command(
-            command=Command.CLOSE_MASTER_AIR_SUPPLY
-        )
-        await command_issued.done
+        await self.cmd_closeMasterAirSupply.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending closeMasterAirSupply.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(
+                command=Command.CLOSE_MASTER_AIR_SUPPLY
+            )
+            await command_issued.done
 
     async def do_m1CloseAirValve(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("m1CloseAirValve")
-        command_issued = await self.write_command(command=Command.M1_CLOSE_AIR_VALVE)
-        await command_issued.done
+        await self.cmd_m1CloseAirValve.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending m1CloseAirValve.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(
+                command=Command.M1_CLOSE_AIR_VALVE
+            )
+            await command_issued.done
 
     async def do_m1SetPressure(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("m1SetPressure")
-        command_issued = await self.write_command(
-            command=Command.M1_SET_PRESSURE, pressure=data.pressure
-        )
-        await command_issued.done
+        await self.cmd_m1SetPressure.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending m1SetPressure.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(
+                command=Command.M1_SET_PRESSURE, pressure=data.pressure
+            )
+            await command_issued.done
 
     async def do_m2CloseAirValve(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("m2CloseAirValve")
-        command_issued = await self.write_command(command=Command.M2_CLOSE_AIR_VALVE)
-        await command_issued.done
+        await self.cmd_m2CloseAirValve.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending m2CloseAirValve.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(
+                command=Command.M2_CLOSE_AIR_VALVE
+            )
+            await command_issued.done
 
     async def do_m1OpenAirValve(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("m1OpenAirValve")
-        command_issued = await self.write_command(command=Command.M1_OPEN_AIR_VALVE)
-        await command_issued.done
+        await self.cmd_m1OpenAirValve.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending m1OpenAirValve.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(command=Command.M1_OPEN_AIR_VALVE)
+            await command_issued.done
 
     async def do_m2OpenAirValve(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("m2OpenAirValve")
-        command_issued = await self.write_command(command=Command.M2_OPEN_AIR_VALVE)
-        await command_issued.done
+        await self.cmd_m2OpenAirValve.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending m2OpenAirValve.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(command=Command.M2_OPEN_AIR_VALVE)
+            await command_issued.done
 
     async def do_m2SetPressure(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("m2SetPressure")
-        command_issued = await self.write_command(
-            command=Command.M2_SET_PRESSURE, pressure=data.pressure
-        )
-        await command_issued.done
+        await self.cmd_m2SetPressure.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending m2SetPressure.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(
+                command=Command.M2_SET_PRESSURE, pressure=data.pressure
+            )
+            await command_issued.done
 
     async def do_openInstrumentAirValve(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("openInstrumentAirValve")
-        command_issued = await self.write_command(
-            command=Command.OPEN_INSTRUMENT_AIR_VALVE
+        await self.cmd_openInstrumentAirValve.ack_in_progress(
+            data, self.cmd_done_timeout
         )
-        await command_issued.done
+        self.log.debug("Sending openInstrumentAirValve.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(
+                command=Command.OPEN_INSTRUMENT_AIR_VALVE
+            )
+            await command_issued.done
 
     async def do_openM1CellVents(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("openM1CellVents")
-        command_issued = await self.write_command(command=Command.OPEN_M1_CELL_VENTS)
-        await command_issued.done
+        await self.cmd_openM1CellVents.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending openM1CellVents.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(
+                command=Command.OPEN_M1_CELL_VENTS
+            )
+            await command_issued.done
 
     async def do_openM1Cover(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("openM1Cover")
-        command_issued = await self.write_command(command=Command.OPEN_M1_COVER)
-        await command_issued.done
+        await self.cmd_openM1Cover.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending openM1Cover.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(command=Command.OPEN_M1_COVER)
+            await command_issued.done
 
     async def do_openMasterAirSupply(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("openMasterAirSupply")
-        command_issued = await self.write_command(
-            command=Command.OPEN_MASTER_AIR_SUPPLY
-        )
-        await command_issued.done
+        await self.cmd_openMasterAirSupply.ack_in_progress(data, self.cmd_done_timeout)
+        self.log.debug("Sending openMasterAirSupply.")
+        async with asyncio.timeout(self.cmd_done_timeout):
+            command_issued = await self.write_command(
+                command=Command.OPEN_MASTER_AIR_SUPPLY
+            )
+            await command_issued.done
 
 
 def run_atpneumatics_simulator() -> None:

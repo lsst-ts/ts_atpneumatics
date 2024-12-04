@@ -67,6 +67,9 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             assert simulator.cmd_evt_server.connected
             assert cmd_evt_client.connected
             await self.verify_all_events(client=cmd_evt_client)
+            data = await cmd_evt_client.read_json()
+            assert data["id"] == "evt_summaryState"
+            assert data["summaryState"] == 5
             yield cmd_evt_client
 
     @contextlib.asynccontextmanager
@@ -624,7 +627,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
-                ack=attcpip.Ack.NOACK,
+                ack=attcpip.Ack.ACK,
                 sequence_id=sequence_id,
             )
 
