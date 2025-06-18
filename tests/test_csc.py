@@ -58,7 +58,6 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             exe_name="run_atpneumatics_simulator",
         )
 
-    @pytest.mark.skip("Fails with DDS but passes with Kafka.")
     async def test_initial_info(self) -> None:
         """Check that all events and telemetry are output at startup
 
