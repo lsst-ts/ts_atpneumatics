@@ -1,4 +1,4 @@
-# This file is part of ts_atpneumaticssimulator.
+# This file is part of ts_atpneumatics.
 #
 # Developed for the Vera Rubin Observatory Telescope and Site Systems.
 # This product includes software developed by the LSST Project

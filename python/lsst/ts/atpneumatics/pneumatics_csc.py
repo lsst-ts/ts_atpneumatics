@@ -1,4 +1,4 @@
-# This file is part of ts_atpneumaticssimulator.
+# This file is part of ts_atpneumatics.
 #
 # Developed for the Vera Rubin Observatory Telescope and Site Systems.
 # This product includes software developed by the LSST Project
@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-__all__ = ["ATPneumaticsCsc", "run_atpneumatics_simulator"]
+__all__ = ["ATPneumaticsCsc", "run_atpneumatics"]
 
 import asyncio
 import pathlib
@@ -33,7 +33,7 @@ from .pneumatics_simulator import PneumaticsSimulator
 
 
 class ATPneumaticsCsc(attcpip.AtTcpipCsc):
-    """Simulator for the auxiliary telescope pneumatics controller CSC.
+    """CSC for the auxiliary telescope pneumatics controller.
 
     Parameters
     ----------
@@ -58,9 +58,7 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
     * powerStatus
     """
 
-    # TODO DM-39357 Remove these lines.
-    # Append "-sim" to avoid confusion with the real ATPneumatics CSC.
-    version = f"{__version__}-sim"
+    version = __version__
 
     def __init__(
         self,
@@ -230,6 +228,6 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
             await command_issued.done
 
 
-def run_atpneumatics_simulator() -> None:
-    """Run the ATPneumatics CSC simulator."""
+def run_atpneumatics() -> None:
+    """Run the ATPneumatics CSC."""
     asyncio.run(ATPneumaticsCsc.amain(index=None))

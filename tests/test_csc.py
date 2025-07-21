@@ -1,4 +1,4 @@
-# This file is part of ts_atpneumaticssimulator.
+# This file is part of ts_atpneumatics.
 #
 # Developed for the Vera Rubin Observatory Telescope and Site Systems.
 # This product includes software developed by the LSST Project
@@ -25,7 +25,7 @@ import unittest
 from typing import Any
 
 import pytest
-from lsst.ts import atpneumaticssimulator, salobj
+from lsst.ts import atpneumatics, salobj
 from lsst.ts.xml import sal_enums
 from lsst.ts.xml.enums import ATPneumatics
 
@@ -42,8 +42,8 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
         config_dir: str,
         override: str = "",
         **kwargs: Any,
-    ) -> atpneumaticssimulator.ATPneumaticsCsc:
-        return atpneumaticssimulator.ATPneumaticsCsc(
+    ) -> atpneumatics.ATPneumaticsCsc:
+        return atpneumatics.ATPneumaticsCsc(
             initial_state=initial_state,
             config_dir=config_dir,
             simulation_mode=1,
@@ -55,7 +55,7 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
         await self.check_bin_script(
             name="ATPneumatics",
             index=None,
-            exe_name="run_atpneumatics_simulator",
+            exe_name="run_atpneumatics",
         )
 
     @pytest.mark.skip("Failing.")
@@ -70,7 +70,7 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             await self.assert_next_summary_state(salobj.State.ENABLED)
             await self.assert_next_sample(
                 topic=self.remote.evt_softwareVersions,
-                cscVersion=atpneumaticssimulator.__version__ + "-sim",
+                cscVersion=atpneumatics.__version__,
                 subsystemVersions="",
             )
 
