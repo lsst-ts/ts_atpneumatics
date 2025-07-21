@@ -6,27 +6,7 @@
 Version History
 ###############
 
-v2.0.0
-------
-
-* Modernize Jenkinsfile.
-* Add JSON schemas for command, event and telemetry exchange via TCP/IP.
-* Add Pneumatics simulator and simulator server for testing the TCP/IP interaction with the real ATPneumatics server.
-* Move simulation code mostly unchanged from the CSC to the simulator.
-* Remove all simulator code from the CSC and connect to the simulator via TCP/IP.
-* Make ATPneumaticsCsc a Configurable CSC.
-* Add support for sending start, disable, enable and standby commands.
-* Add support for summary state, detailed state and errorCode events and for FAULT state.
-* Support simulation mode 0.
-* Update the version of ts-conda-build to 0.4 in the conda recipe.
-
-Requirements:
-
-* ts_salobj 7.1
-* ts_tcpip 1.2
-* ts_utils 1
-* ts_idl 2
-* IDL file for ATPneumatics built from ts_xml 11
+.. towncrier release notes start
 
 v1.2.1
 ------
