@@ -1,4 +1,4 @@
-# This file is part of ts_atpneumaticssimulator.
+# This file is part of ts_atpneumatics.
 #
 # Developed for the Vera Rubin Observatory Telescope and Site Systems.
 # This product includes software developed by the LSST Project
@@ -25,7 +25,7 @@ import unittest
 from typing import Any
 
 import pytest
-from lsst.ts import atpneumaticssimulator, salobj
+from lsst.ts import atpneumatics, salobj
 from lsst.ts.xml import sal_enums
 from lsst.ts.xml.enums import ATPneumatics
 
@@ -42,8 +42,8 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
         config_dir: str,
         override: str = "",
         **kwargs: Any,
-    ) -> atpneumaticssimulator.ATPneumaticsCsc:
-        return atpneumaticssimulator.ATPneumaticsCsc(
+    ) -> atpneumatics.ATPneumaticsCsc:
+        return atpneumatics.ATPneumaticsCsc(
             initial_state=initial_state,
             config_dir=config_dir,
             simulation_mode=1,
@@ -55,10 +55,10 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
         await self.check_bin_script(
             name="ATPneumatics",
             index=None,
-            exe_name="run_atpneumatics_simulator",
+            exe_name="run_atpneumatics",
         )
 
-    @pytest.mark.skip
+    @pytest.mark.skip("Failing.")
     async def test_initial_info(self) -> None:
         """Check that all events and telemetry are output at startup
 
@@ -70,7 +70,7 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             await self.assert_next_summary_state(salobj.State.ENABLED)
             await self.assert_next_sample(
                 topic=self.remote.evt_softwareVersions,
-                cscVersion=atpneumaticssimulator.__version__ + "-sim",
+                cscVersion=atpneumatics.__version__,
                 subsystemVersions="",
             )
 
@@ -450,7 +450,7 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
         ):
             await self.remote.cmd_start.start()
             await self.csc.simulator.configure()
-            assert self.csc.simulator.simulator_state == sal_enums.State.DISABLED
+            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
 
             await self.remote.cmd_enable.start()
             assert self.csc.simulator.simulator_state == sal_enums.State.ENABLED
@@ -459,10 +459,11 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             assert self.csc.simulator.simulator_state == sal_enums.State.DISABLED
 
             await self.remote.cmd_standby.start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
+            assert self.csc.simulator is None
 
             await self.remote.cmd_start.start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.DISABLED
+            assert self.csc.simulator is not None
+            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
 
             await self.remote.cmd_enable.start()
             assert self.csc.simulator.simulator_state == sal_enums.State.ENABLED
@@ -471,22 +472,4 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             assert self.csc.simulator.simulator_state == sal_enums.State.DISABLED
 
             await self.remote.cmd_standby.start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
-
-    async def test_csc_with_fault_state(self) -> None:
-        async with self.make_csc(
-            initial_state=salobj.State.STANDBY, config_dir=CONFIG_DIR
-        ):
-            await self.remote.cmd_start.start()
-            await self.csc.simulator.configure()
-            assert self.csc.simulator.simulator_state == sal_enums.State.DISABLED
-
-            await self.remote.cmd_standby.start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
-
-            self.csc.simulator.go_to_fault_state = True
-            await self.remote.cmd_start.set_start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.FAULT
-
-            await self.remote.cmd_standby.set_start()
-            assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY
+            assert self.csc.simulator is None

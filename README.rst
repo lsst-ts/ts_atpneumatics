@@ -1,10 +1,10 @@
 ########################
-ts_atpneumaticssimulator
+ts_atpneumatics
 ########################
 
-``ts_atpneumaticssimulator`` is an LSST Telescope and Site package that provides a simulator for the auxiliary telescope pneumatics controller: ATPneumatics.
+``ts_atpneumatics`` is an LSST Telescope and Site package that provides a CSC for the auxiliary telescope pneumatics controller: ATPneumatics.
 
-`Documentation <https://ts-atpneumaticssimulator.lsst.io>`_
+`Documentation <https://ts-atpneumatics.lsst.io>`_
 
 The package is compatible with ``setuptools``, as well as the `eups <https://github.com/RobertLuptonTheGood/eups>`_ package management system and ``scons`` build system.
 Assuming you have the basic Vera C. Rubin LSST DM stack installed you can do the following, from within the package directory:

@@ -1,4 +1,4 @@
-# This file is part of ts_atpneumaticssimulator.
+# This file is part of ts_atpneumatics.
 #
 # Developed for the Vera Rubin Observatory Telescope and Site Systems.
 # This product includes software developed by the LSST Project
@@ -26,13 +26,13 @@ import typing
 import unittest
 
 import jsonschema
-from lsst.ts import atpneumaticssimulator, attcpip, tcpip
+from lsst.ts import atpneumatics, attcpip, tcpip
 from lsst.ts.xml import sal_enums
 
 # Standard timeout in seconds.
 TIMEOUT = 2
 
-EVENTS_TO_EXPECT = set(atpneumaticssimulator.Event)
+EVENTS_TO_EXPECT = set(atpneumatics.Event)
 
 
 class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
@@ -42,8 +42,8 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
     @contextlib.asynccontextmanager
     async def create_pneumatics_simulator(
         self, go_to_fault_state: bool
-    ) -> typing.AsyncGenerator[atpneumaticssimulator.PneumaticsSimulator, None]:
-        async with atpneumaticssimulator.PneumaticsSimulator(
+    ) -> typing.AsyncGenerator[atpneumatics.PneumaticsSimulator, None]:
+        async with atpneumatics.PneumaticsSimulator(
             host=tcpip.LOCALHOST_IPV4, cmd_evt_port=5000, telemetry_port=6000
         ) as simulator:
             simulator.go_to_fault_state = go_to_fault_state
@@ -53,7 +53,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
 
     @contextlib.asynccontextmanager
     async def create_cmd_evt_client(
-        self, simulator: atpneumaticssimulator.PneumaticsSimulator
+        self, simulator: atpneumatics.PneumaticsSimulator
     ) -> typing.AsyncGenerator[tcpip.Client, None]:
         async with tcpip.Client(
             host=simulator.cmd_evt_server.host,
@@ -67,11 +67,14 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             assert simulator.cmd_evt_server.connected
             assert cmd_evt_client.connected
             await self.verify_all_events(client=cmd_evt_client)
+            data = await cmd_evt_client.read_json()
+            assert data["id"] == "evt_summaryState"
+            assert data["summaryState"] == 5
             yield cmd_evt_client
 
     @contextlib.asynccontextmanager
     async def create_telemetry_client(
-        self, simulator: atpneumaticssimulator.PneumaticsSimulator
+        self, simulator: atpneumatics.PneumaticsSimulator
     ) -> typing.AsyncGenerator[tcpip.Client, None]:
         async with tcpip.Client(
             host=simulator.telemetry_server.host,
@@ -139,7 +142,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.INSTRUMENTSTATE,
+                evt_name=atpneumatics.Event.INSTRUMENTSTATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -153,7 +156,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             self.create_cmd_evt_client(simulator) as cmd_evt_client,
         ):
             # Mock a state where the M1 vents are open.
-            simulator.m1_vents_state = atpneumaticssimulator.OpenCloseState.OPEN
+            simulator.m1_vents_state = atpneumatics.OpenCloseState.OPEN
             sequence_id = 1
             await cmd_evt_client.write_json(
                 data={
@@ -169,15 +172,15 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1VENTSLIMITSWITCHES,
+                evt_name=atpneumatics.Event.M1VENTSLIMITSWITCHES,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1VENTSPOSITION,
+                evt_name=atpneumatics.Event.M1VENTSPOSITION,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.CELLVENTSTATE,
+                evt_name=atpneumatics.Event.CELLVENTSTATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -191,7 +194,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             self.create_cmd_evt_client(simulator) as cmd_evt_client,
         ):
             # Mock a state where the M1 covers are open.
-            simulator.m1_covers_state = atpneumaticssimulator.OpenCloseState.OPEN
+            simulator.m1_covers_state = atpneumatics.OpenCloseState.OPEN
             sequence_id = 1
             await cmd_evt_client.write_json(
                 data={
@@ -207,11 +210,11 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1COVERLIMITSWITCHES,
+                evt_name=atpneumatics.Event.M1COVERLIMITSWITCHES,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1COVERSTATE,
+                evt_name=atpneumatics.Event.M1COVERSTATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -239,7 +242,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.MAINVALVESTATE,
+                evt_name=atpneumatics.Event.MAINVALVESTATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -267,7 +270,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1STATE,
+                evt_name=atpneumatics.Event.M1STATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -295,7 +298,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1STATE,
+                evt_name=atpneumatics.Event.M1STATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -313,7 +316,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_m1SetPressure",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    atpneumaticssimulator.CommandArgument.PRESSURE: 0.0,
+                    atpneumatics.CommandArgument.PRESSURE: 0.0,
                 }
             )
             await self.verify_command_response(
@@ -323,7 +326,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1SETPRESSURE,
+                evt_name=atpneumatics.Event.M1SETPRESSURE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -351,7 +354,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M2STATE,
+                evt_name=atpneumatics.Event.M2STATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -379,7 +382,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M2STATE,
+                evt_name=atpneumatics.Event.M2STATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -397,7 +400,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_m2SetPressure",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    atpneumaticssimulator.CommandArgument.PRESSURE: 0.0,
+                    atpneumatics.CommandArgument.PRESSURE: 0.0,
                 }
             )
             await self.verify_command_response(
@@ -407,7 +410,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M2SETPRESSURE,
+                evt_name=atpneumatics.Event.M2SETPRESSURE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -435,7 +438,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.INSTRUMENTSTATE,
+                evt_name=atpneumatics.Event.INSTRUMENTSTATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -465,31 +468,31 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.CELLVENTSTATE,
+                evt_name=atpneumatics.Event.CELLVENTSTATE,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1VENTSLIMITSWITCHES,
+                evt_name=atpneumatics.Event.M1VENTSLIMITSWITCHES,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1VENTSPOSITION,
+                evt_name=atpneumatics.Event.M1VENTSPOSITION,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.CELLVENTSTATE,
+                evt_name=atpneumatics.Event.CELLVENTSTATE,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1VENTSLIMITSWITCHES,
+                evt_name=atpneumatics.Event.M1VENTSLIMITSWITCHES,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1VENTSPOSITION,
+                evt_name=atpneumatics.Event.M1VENTSPOSITION,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.CELLVENTSTATE,
+                evt_name=atpneumatics.Event.CELLVENTSTATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -519,19 +522,19 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1COVERLIMITSWITCHES,
+                evt_name=atpneumatics.Event.M1COVERLIMITSWITCHES,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1COVERSTATE,
+                evt_name=atpneumatics.Event.M1COVERSTATE,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1COVERLIMITSWITCHES,
+                evt_name=atpneumatics.Event.M1COVERLIMITSWITCHES,
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.M1COVERSTATE,
+                evt_name=atpneumatics.Event.M1COVERSTATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -559,7 +562,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.MAINVALVESTATE,
+                evt_name=atpneumatics.Event.MAINVALVESTATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -605,7 +608,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_event(
                 client=cmd_evt_client,
-                evt_name=atpneumaticssimulator.Event.INSTRUMENTSTATE,
+                evt_name=atpneumatics.Event.INSTRUMENTSTATE,
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
@@ -624,7 +627,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             )
             await self.verify_command_response(
                 client=cmd_evt_client,
-                ack=attcpip.Ack.NOACK,
+                ack=attcpip.Ack.ACK,
                 sequence_id=sequence_id,
             )
 
@@ -637,7 +640,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             # No need to call ``simulator.update_telemetry`` explicitly since
             # connecting with a cmd_evt_client starts the event and telemetry
             # loop.
-            for _ in atpneumaticssimulator.Telemetry:
+            for _ in atpneumatics.Telemetry:
                 data = await telemetry_client.read_json()
                 # No need for asserts here. If the data id is not present in
                 # registry or the validation of the schema fails, the test will

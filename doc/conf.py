@@ -3,10 +3,10 @@
 This configuration only affects single-package Sphinx documentation builds.
 """
 
-import lsst.ts.atpneumaticssimulator  # noqa
+import lsst.ts.atpneumatics  # noqa
 from documenteer.conf.pipelinespkg import *  # type: ignore # noqa
 
-project = "ts_atpneumaticssimulator"
+project = "ts_atpneumatics"
 html_theme_options["logotext"] = project  # type: ignore # noqa
 html_title = project
 html_short_title = project
