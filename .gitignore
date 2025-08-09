@@ -16,3 +16,10 @@ pytest_session.txt
 .coverage
 
 .vscode
+.pre-commit-config.yaml
+.flake8
+.isort.cfg
+.mypy.ini
+.clang-format
+.ruff.toml
+towncrier.toml

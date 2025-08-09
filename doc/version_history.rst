@@ -1,10 +1,12 @@
-.. py:currentmodule:: lsst.ts.atpneumaticssimulator
+.. py:currentmodule:: lsst.ts.atpneumatics
 
-.. _lsst.ts.atpneumaticssimulator.version_history:
+.. _lsst.ts.atpneumatics.version_history:
 
 ###############
 Version History
 ###############
+
+.. towncrier release notes start
 
 v1.2.1
 ------
@@ -124,7 +126,7 @@ Requirements:
 v0.5.5
 ------
 
-* Update Jenkinsfile.conda to Jenkins Shared Library 
+* Update Jenkinsfile.conda to Jenkins Shared Library
 * Pinned the ts-idl and ts-salobj version in conda recipe
 * Change conda package name to ts-atpneumaticssimulator
 
