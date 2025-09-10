@@ -132,7 +132,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_closeInstrumentAirValve",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -162,7 +161,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_closeM1CellVents",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -200,7 +198,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_closeM1Cover",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -232,7 +229,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_closeMasterAirSupply",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -260,7 +256,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_m1CloseAirValve",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -288,7 +283,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_m1OpenAirValve",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -344,7 +338,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_m2CloseAirValve",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -372,7 +365,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_m2OpenAirValve",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -428,7 +420,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_openInstrumentAirValve",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -458,7 +449,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_openM1CellVents",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -512,7 +502,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_openM1Cover",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -552,7 +541,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_openMasterAirSupply",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -598,7 +586,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_closeInstrumentAirValve",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
@@ -622,7 +609,6 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                 data={
                     attcpip.CommonCommandArgument.ID: "cmd_closeInstrumentAirValve",
                     attcpip.CommonCommandArgument.SEQUENCE_ID: sequence_id,
-                    attcpip.CommonCommandArgument.VALUE: True,
                 }
             )
             await self.verify_command_response(
