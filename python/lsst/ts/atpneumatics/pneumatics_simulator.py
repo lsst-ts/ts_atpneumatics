@@ -61,9 +61,7 @@ class PneumaticsSimulator(attcpip.AtSimulator):
     """
 
     def __init__(self, host: str, cmd_evt_port: int, telemetry_port: int) -> None:
-        super().__init__(
-            host=host, cmd_evt_port=cmd_evt_port, telemetry_port=telemetry_port
-        )
+        super().__init__(host=host, cmd_evt_port=cmd_evt_port, telemetry_port=telemetry_port)
 
         # Interval between telemetry updates [sec].
         self.telemetry_interval = 1.0
@@ -341,9 +339,7 @@ class PneumaticsSimulator(attcpip.AtSimulator):
         """
         if not (closed or opened):
             self.cell_vents_state = CellVentState.INMOTION
-            await self._write_evt(
-                evt_id=Event.CELLVENTSTATE, state=self.cell_vents_state
-            )
+            await self._write_evt(evt_id=Event.CELLVENTSTATE, state=self.cell_vents_state)
 
         self.m1_vents_limit_switches.ventsClosedActive = closed
         self.m1_vents_limit_switches.ventsOpenedActive = opened
@@ -358,9 +354,7 @@ class PneumaticsSimulator(attcpip.AtSimulator):
             self.m1_vents_position = VentsPosition.CLOSED
         else:
             self.m1_vents_position = VentsPosition.PARTIALLYOPENED
-        await self._write_evt(
-            evt_id=Event.M1VENTSPOSITION, position=self.m1_vents_position
-        )
+        await self._write_evt(evt_id=Event.M1VENTSPOSITION, position=self.m1_vents_position)
         if opened:
             self.cell_vents_state = CellVentState.OPENED
         elif closed:
