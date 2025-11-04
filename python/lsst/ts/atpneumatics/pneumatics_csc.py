@@ -83,24 +83,16 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
 
     async def start_clients(self) -> None:
         if self.simulation_mode == 1 and self.simulator is None:
-            self.simulator = PneumaticsSimulator(
-                host=self.config.host,
-                cmd_evt_port=self.config.cmd_evt_port,
-                telemetry_port=self.config.telemetry_port,
-            )
+            self.simulator = PneumaticsSimulator(host=self.config.host, cmd_evt_port=0, telemetry_port=0)
             await self.simulator.configure()
         await super().start_clients()
 
     async def do_closeInstrumentAirValve(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("closeInstrumentAirValve")
-        await self.cmd_closeInstrumentAirValve.ack_in_progress(
-            data, self.cmd_done_timeout
-        )
+        await self.cmd_closeInstrumentAirValve.ack_in_progress(data, self.cmd_done_timeout)
         self.log.debug("Sending closeInstrumentAirValve.")
         async with asyncio.timeout(self.cmd_done_timeout):
-            command_issued = await self.write_command(
-                command=Command.CLOSE_INSTRUMENT_AIR_VALE
-            )
+            command_issued = await self.write_command(command=Command.CLOSE_INSTRUMENT_AIR_VALE)
             await command_issued.done
 
     async def do_closeM1CellVents(self, data: salobj.BaseMsgType) -> None:
@@ -108,9 +100,7 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
         await self.cmd_closeM1CellVents.ack_in_progress(data, self.cmd_done_timeout)
         self.log.debug("Sending closeM1CellVents.")
         async with asyncio.timeout(self.cmd_done_timeout):
-            command_issued = await self.write_command(
-                command=Command.CLOSE_M1_CELL_VENTS
-            )
+            command_issued = await self.write_command(command=Command.CLOSE_M1_CELL_VENTS)
             await command_issued.done
 
     async def do_closeM1Cover(self, data: salobj.BaseMsgType) -> None:
@@ -126,9 +116,7 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
         await self.cmd_closeMasterAirSupply.ack_in_progress(data, self.cmd_done_timeout)
         self.log.debug("Sending closeMasterAirSupply.")
         async with asyncio.timeout(self.cmd_done_timeout):
-            command_issued = await self.write_command(
-                command=Command.CLOSE_MASTER_AIR_SUPPLY
-            )
+            command_issued = await self.write_command(command=Command.CLOSE_MASTER_AIR_SUPPLY)
             await command_issued.done
 
     async def do_m1CloseAirValve(self, data: salobj.BaseMsgType) -> None:
@@ -136,9 +124,7 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
         await self.cmd_m1CloseAirValve.ack_in_progress(data, self.cmd_done_timeout)
         self.log.debug("Sending m1CloseAirValve.")
         async with asyncio.timeout(self.cmd_done_timeout):
-            command_issued = await self.write_command(
-                command=Command.M1_CLOSE_AIR_VALVE
-            )
+            command_issued = await self.write_command(command=Command.M1_CLOSE_AIR_VALVE)
             await command_issued.done
 
     async def do_m1SetPressure(self, data: salobj.BaseMsgType) -> None:
@@ -146,9 +132,7 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
         await self.cmd_m1SetPressure.ack_in_progress(data, self.cmd_done_timeout)
         self.log.debug("Sending m1SetPressure.")
         async with asyncio.timeout(self.cmd_done_timeout):
-            command_issued = await self.write_command(
-                command=Command.M1_SET_PRESSURE, pressure=data.pressure
-            )
+            command_issued = await self.write_command(command=Command.M1_SET_PRESSURE, pressure=data.pressure)
             await command_issued.done
 
     async def do_m2CloseAirValve(self, data: salobj.BaseMsgType) -> None:
@@ -156,9 +140,7 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
         await self.cmd_m2CloseAirValve.ack_in_progress(data, self.cmd_done_timeout)
         self.log.debug("Sending m2CloseAirValve.")
         async with asyncio.timeout(self.cmd_done_timeout):
-            command_issued = await self.write_command(
-                command=Command.M2_CLOSE_AIR_VALVE
-            )
+            command_issued = await self.write_command(command=Command.M2_CLOSE_AIR_VALVE)
             await command_issued.done
 
     async def do_m1OpenAirValve(self, data: salobj.BaseMsgType) -> None:
@@ -182,21 +164,15 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
         await self.cmd_m2SetPressure.ack_in_progress(data, self.cmd_done_timeout)
         self.log.debug("Sending m2SetPressure.")
         async with asyncio.timeout(self.cmd_done_timeout):
-            command_issued = await self.write_command(
-                command=Command.M2_SET_PRESSURE, pressure=data.pressure
-            )
+            command_issued = await self.write_command(command=Command.M2_SET_PRESSURE, pressure=data.pressure)
             await command_issued.done
 
     async def do_openInstrumentAirValve(self, data: salobj.BaseMsgType) -> None:
         self.assert_enabled("openInstrumentAirValve")
-        await self.cmd_openInstrumentAirValve.ack_in_progress(
-            data, self.cmd_done_timeout
-        )
+        await self.cmd_openInstrumentAirValve.ack_in_progress(data, self.cmd_done_timeout)
         self.log.debug("Sending openInstrumentAirValve.")
         async with asyncio.timeout(self.cmd_done_timeout):
-            command_issued = await self.write_command(
-                command=Command.OPEN_INSTRUMENT_AIR_VALVE
-            )
+            command_issued = await self.write_command(command=Command.OPEN_INSTRUMENT_AIR_VALVE)
             await command_issued.done
 
     async def do_openM1CellVents(self, data: salobj.BaseMsgType) -> None:
@@ -204,9 +180,7 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
         await self.cmd_openM1CellVents.ack_in_progress(data, self.cmd_done_timeout)
         self.log.debug("Sending openM1CellVents.")
         async with asyncio.timeout(self.cmd_done_timeout):
-            command_issued = await self.write_command(
-                command=Command.OPEN_M1_CELL_VENTS
-            )
+            command_issued = await self.write_command(command=Command.OPEN_M1_CELL_VENTS)
             await command_issued.done
 
     async def do_openM1Cover(self, data: salobj.BaseMsgType) -> None:
@@ -222,9 +196,7 @@ class ATPneumaticsCsc(attcpip.AtTcpipCsc):
         await self.cmd_openMasterAirSupply.ack_in_progress(data, self.cmd_done_timeout)
         self.log.debug("Sending openMasterAirSupply.")
         async with asyncio.timeout(self.cmd_done_timeout):
-            command_issued = await self.write_command(
-                command=Command.OPEN_MASTER_AIR_SUPPLY
-            )
+            command_issued = await self.write_command(command=Command.OPEN_MASTER_AIR_SUPPLY)
             await command_issued.done
 
 

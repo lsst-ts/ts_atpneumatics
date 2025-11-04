@@ -64,9 +64,7 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
 
         except the m3PortSelected event
         """
-        async with self.make_csc(
-            initial_state=salobj.State.ENABLED, config_dir=CONFIG_DIR
-        ):
+        async with self.make_csc(initial_state=salobj.State.ENABLED, config_dir=CONFIG_DIR):
             await self.assert_next_summary_state(salobj.State.ENABLED)
             await self.assert_next_sample(
                 topic=self.remote.evt_softwareVersions,
@@ -97,21 +95,15 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
                 await tel.next(flush=False, timeout=STD_TIMEOUT)
 
     async def test_air_valves(self) -> None:
-        async with self.make_csc(
-            initial_state=salobj.State.ENABLED, config_dir=CONFIG_DIR
-        ):
+        async with self.make_csc(initial_state=salobj.State.ENABLED, config_dir=CONFIG_DIR):
             await self.assert_next_sample(
                 self.remote.evt_instrumentState, state=ATPneumatics.AirValveState.OPENED
             )
             await self.assert_next_sample(
                 self.remote.evt_mainValveState, state=ATPneumatics.AirValveState.OPENED
             )
-            await self.assert_next_sample(
-                self.remote.evt_m1State, state=ATPneumatics.AirValveState.OPENED
-            )
-            await self.assert_next_sample(
-                self.remote.evt_m2State, state=ATPneumatics.AirValveState.OPENED
-            )
+            await self.assert_next_sample(self.remote.evt_m1State, state=ATPneumatics.AirValveState.OPENED)
+            await self.assert_next_sample(self.remote.evt_m2State, state=ATPneumatics.AirValveState.OPENED)
 
             await self.remote.cmd_closeInstrumentAirValve.start(timeout=STD_TIMEOUT)
             await self.assert_next_sample(
@@ -124,14 +116,10 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             )
 
             await self.remote.cmd_m1CloseAirValve.start(timeout=STD_TIMEOUT)
-            await self.assert_next_sample(
-                self.remote.evt_m1State, state=ATPneumatics.AirValveState.CLOSED
-            )
+            await self.assert_next_sample(self.remote.evt_m1State, state=ATPneumatics.AirValveState.CLOSED)
 
             await self.remote.cmd_m2CloseAirValve.start(timeout=STD_TIMEOUT)
-            await self.assert_next_sample(
-                self.remote.evt_m2State, state=ATPneumatics.AirValveState.CLOSED
-            )
+            await self.assert_next_sample(self.remote.evt_m2State, state=ATPneumatics.AirValveState.CLOSED)
 
             await self.remote.cmd_openInstrumentAirValve.start(timeout=STD_TIMEOUT)
             await self.assert_next_sample(
@@ -144,21 +132,15 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             )
 
             await self.remote.cmd_m1OpenAirValve.start(timeout=STD_TIMEOUT)
-            await self.assert_next_sample(
-                self.remote.evt_m1State, state=ATPneumatics.AirValveState.OPENED
-            )
+            await self.assert_next_sample(self.remote.evt_m1State, state=ATPneumatics.AirValveState.OPENED)
 
             await self.remote.cmd_m2OpenAirValve.start(timeout=STD_TIMEOUT)
-            await self.assert_next_sample(
-                self.remote.evt_m2State, state=ATPneumatics.AirValveState.OPENED
-            )
+            await self.assert_next_sample(self.remote.evt_m2State, state=ATPneumatics.AirValveState.OPENED)
 
     async def test_cell_vents(self) -> None:
         desired_close_time = 0.4  # sec
         desired_open_time = 0.8  # sec
-        async with self.make_csc(
-            initial_state=salobj.State.ENABLED, config_dir=CONFIG_DIR
-        ):
+        async with self.make_csc(initial_state=salobj.State.ENABLED, config_dir=CONFIG_DIR):
             await self.csc.simulator.configure(
                 cell_vents_close_time=desired_close_time,
                 cell_vents_open_time=desired_open_time,
@@ -215,9 +197,7 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             # sending open again has no effect
             await self.remote.cmd_openM1CellVents.start(timeout=STD_TIMEOUT)
             with pytest.raises(asyncio.TimeoutError):
-                await self.remote.evt_cellVentsState.next(
-                    flush=False, timeout=NODATA_TIMEOUT
-                )
+                await self.remote.evt_cellVentsState.next(flush=False, timeout=NODATA_TIMEOUT)
 
             await self.remote.cmd_closeM1CellVents.start(timeout=STD_TIMEOUT)
 
@@ -257,16 +237,12 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             # sending close again has no effect
             await self.remote.cmd_closeM1CellVents.start(timeout=STD_TIMEOUT)
             with pytest.raises(asyncio.TimeoutError):
-                await self.remote.evt_cellVentsState.next(
-                    flush=False, timeout=NODATA_TIMEOUT
-                )
+                await self.remote.evt_cellVentsState.next(flush=False, timeout=NODATA_TIMEOUT)
 
     async def test_mirror_covers(self) -> None:
         desired_close_time = 0.4  # sec
         desired_open_time = 0.8  # sec
-        async with self.make_csc(
-            initial_state=salobj.State.ENABLED, config_dir=CONFIG_DIR
-        ):
+        async with self.make_csc(initial_state=salobj.State.ENABLED, config_dir=CONFIG_DIR):
             await self.csc.simulator.configure(
                 m1_covers_close_time=desired_close_time,
                 m1_covers_open_time=desired_open_time,
@@ -329,9 +305,7 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             # sending open again has no effect
             await self.remote.cmd_openM1Cover.start(timeout=STD_TIMEOUT)
             with pytest.raises(asyncio.TimeoutError):
-                await self.remote.evt_m1CoverState.next(
-                    flush=False, timeout=NODATA_TIMEOUT
-                )
+                await self.remote.evt_m1CoverState.next(flush=False, timeout=NODATA_TIMEOUT)
 
             await self.remote.cmd_closeM1Cover.start(timeout=STD_TIMEOUT)
 
@@ -375,14 +349,10 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             # sending close again has no effect
             await self.remote.cmd_closeM1Cover.start(timeout=STD_TIMEOUT)
             with pytest.raises(asyncio.TimeoutError):
-                await self.remote.evt_m1CoverState.next(
-                    flush=False, timeout=NODATA_TIMEOUT
-                )
+                await self.remote.evt_m1CoverState.next(flush=False, timeout=NODATA_TIMEOUT)
 
     async def test_set_pressure(self) -> None:
-        async with self.make_csc(
-            initial_state=salobj.State.ENABLED, config_dir=CONFIG_DIR
-        ):
+        async with self.make_csc(initial_state=salobj.State.ENABLED, config_dir=CONFIG_DIR):
             # output telemetry often so we don't have to wait
             self.csc.telemetry_interval = 0.1
             init_m1_pressure = 5
@@ -392,39 +362,25 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
                 m2_pressure=init_m2_pressure,
             )
 
-            m1data = await self.remote.tel_m1AirPressure.next(
-                flush=True, timeout=STD_TIMEOUT
-            )
+            m1data = await self.remote.tel_m1AirPressure.next(flush=True, timeout=STD_TIMEOUT)
             assert m1data.pressure == pytest.approx(init_m1_pressure)
-            m2data = await self.remote.tel_m2AirPressure.next(
-                flush=True, timeout=STD_TIMEOUT
-            )
+            m2data = await self.remote.tel_m2AirPressure.next(flush=True, timeout=STD_TIMEOUT)
             assert m2data.pressure == pytest.approx(init_m2_pressure)
 
             cmd_m1pressure = 35
             cmd_m2pressure = 47
 
-            await self.remote.cmd_m1SetPressure.set_start(
-                pressure=cmd_m1pressure, timeout=STD_TIMEOUT
-            )
-            await self.remote.cmd_m2SetPressure.set_start(
-                pressure=cmd_m2pressure, timeout=STD_TIMEOUT
-            )
+            await self.remote.cmd_m1SetPressure.set_start(pressure=cmd_m1pressure, timeout=STD_TIMEOUT)
+            await self.remote.cmd_m2SetPressure.set_start(pressure=cmd_m2pressure, timeout=STD_TIMEOUT)
 
-            m1data = await self.remote.tel_m1AirPressure.next(
-                flush=True, timeout=STD_TIMEOUT
-            )
+            m1data = await self.remote.tel_m1AirPressure.next(flush=True, timeout=STD_TIMEOUT)
             assert m1data.pressure == pytest.approx(cmd_m1pressure)
-            m2data = await self.remote.tel_m2AirPressure.next(
-                flush=True, timeout=STD_TIMEOUT
-            )
+            m2data = await self.remote.tel_m2AirPressure.next(flush=True, timeout=STD_TIMEOUT)
             assert m2data.pressure == pytest.approx(cmd_m2pressure)
 
     async def test_standard_state_transitions(self) -> None:
         """Test standard CSC state transitions."""
-        async with self.make_csc(
-            initial_state=salobj.State.STANDBY, config_dir=CONFIG_DIR
-        ):
+        async with self.make_csc(initial_state=salobj.State.STANDBY, config_dir=CONFIG_DIR):
             await self.check_standard_state_transitions(
                 enabled_commands=(
                     "closeInstrumentAirValve",
@@ -445,9 +401,7 @@ class CscTestCase(salobj.BaseCscTestCase, unittest.IsolatedAsyncioTestCase):
             )
 
     async def test_csc_state_commands(self) -> None:
-        async with self.make_csc(
-            initial_state=salobj.State.STANDBY, config_dir=CONFIG_DIR
-        ):
+        async with self.make_csc(initial_state=salobj.State.STANDBY, config_dir=CONFIG_DIR):
             await self.remote.cmd_start.start()
             await self.csc.simulator.configure()
             assert self.csc.simulator.simulator_state == sal_enums.State.STANDBY

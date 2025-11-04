@@ -23,10 +23,7 @@ __all__ = ["CONFIG_SCHEMA"]
 
 import yaml
 
-URL = (
-    "https://github.com/lsst-ts/ts_atpneumatics/blob/main/python/lsst/ts/"
-    "atpneumatics/config_schema.py"
-)
+URL = "https://github.com/lsst-ts/ts_atpneumatics/blob/main/python/lsst/ts/atpneumatics/config_schema.py"
 
 CONFIG_SCHEMA = yaml.safe_load(
     f"""
