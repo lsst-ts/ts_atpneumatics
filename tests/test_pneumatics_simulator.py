@@ -61,9 +61,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             log=self.log,
             name="CmdEvtClient",
         ) as cmd_evt_client:
-            await asyncio.wait_for(
-                simulator.cmd_evt_server.connected_task, timeout=TIMEOUT
-            )
+            await asyncio.wait_for(simulator.cmd_evt_server.connected_task, timeout=TIMEOUT)
             assert simulator.cmd_evt_server.connected
             assert cmd_evt_client.connected
             await self.verify_all_events(client=cmd_evt_client)
@@ -82,9 +80,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
             log=self.log,
             name="TelemetryClient",
         ) as telemetry_client:
-            await asyncio.wait_for(
-                simulator.telemetry_server.connected_task, timeout=TIMEOUT
-            )
+            await asyncio.wait_for(simulator.telemetry_server.connected_task, timeout=TIMEOUT)
             assert simulator.telemetry_server.connected
             assert telemetry_client.connected
             yield telemetry_client
@@ -665,12 +661,8 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                     ack=attcpip.Ack.SUCCESS,
                     sequence_id=sequence_id,
                 )
-                await self.verify_event(
-                    cmd_evt_client, attcpip.CommonEvent.SUMMARY_STATE
-                )
-                assert (
-                    simulator.simulator_state == commands_and_expected_states[command]
-                )
+                await self.verify_event(cmd_evt_client, attcpip.CommonEvent.SUMMARY_STATE)
+                assert simulator.simulator_state == commands_and_expected_states[command]
 
     async def test_fault_state(self) -> None:
         async with (
@@ -700,13 +692,7 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
                     ack=attcpip.Ack.SUCCESS,
                     sequence_id=sequence_id,
                 )
-                await self.verify_event(
-                    cmd_evt_client, attcpip.CommonEvent.SUMMARY_STATE
-                )
+                await self.verify_event(cmd_evt_client, attcpip.CommonEvent.SUMMARY_STATE)
                 if commands_and_expected_states[command] == sal_enums.State.FAULT:
-                    await self.verify_event(
-                        cmd_evt_client, attcpip.CommonEvent.ERROR_CODE
-                    )
-                assert (
-                    simulator.simulator_state == commands_and_expected_states[command]
-                )
+                    await self.verify_event(cmd_evt_client, attcpip.CommonEvent.ERROR_CODE)
+                assert simulator.simulator_state == commands_and_expected_states[command]
