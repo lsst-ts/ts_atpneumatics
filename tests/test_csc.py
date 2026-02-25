@@ -25,6 +25,7 @@ import unittest
 from typing import Any
 
 import pytest
+
 from lsst.ts import atpneumatics, salobj
 from lsst.ts.xml import sal_enums
 from lsst.ts.xml.enums import ATPneumatics

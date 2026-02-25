@@ -7,7 +7,7 @@ name = "ts_atpneumatics"
 description = "An LSST Telescope and Site package that provides a simulator for the auxiliary telescope pneumatics control system (ATPneumatics)."
 license = { text = "GPL" }
 classifiers = ["Programming Language :: Python :: 3"]
-urls = { documentation = "https://ts-atpneumatics.lsst.io", repository = "https://github.com/lsst-ts/ts_atpneumatics" }
+urls = { documentation = "https://ts-atpneumatics.lsst.io", source_code = "https://github.com/lsst-ts/ts_atpneumatics" }
 dynamic = ["version"]
 
 [tool.setuptools.dynamic]
