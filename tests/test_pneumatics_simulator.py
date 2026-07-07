@@ -114,6 +114,13 @@ class PneumaticsSimulatorTestCase(unittest.IsolatedAsyncioTestCase):
         sequence_id: int,
     ) -> None:
         data = await client.read_json()
+        if "level" in data:
+            # Verify evt_logMessage..
+            assert attcpip.CommonCommandArgument.ID in data
+            assert "level" in data
+            assert data[attcpip.CommonCommandArgument.ID] == "evt_logMessage"
+
+            data = await client.read_json()
         assert attcpip.CommonCommandArgument.ID in data
         assert attcpip.CommonCommandArgument.SEQUENCE_ID in data
         assert data[attcpip.CommonCommandArgument.ID] == ack
