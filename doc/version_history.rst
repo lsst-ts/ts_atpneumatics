@@ -8,6 +8,16 @@ Version History
 
 .. towncrier release notes start
 
+v2.1.4 (2026-07-07)
+===================
+
+Performance Enhancement
+-----------------------
+
+- Prepared unit tests for upcoming ts_attcpip changes. (`OSW-326 <https://rubinobs.atlassian.net//browse/OSW-326>`_)
+- Set main pressure to a realistic value. (`OSW-326 <https://rubinobs.atlassian.net//browse/OSW-326>`_)
+
+
 v2.1.3 (2026-02-25)
 ===================
 
