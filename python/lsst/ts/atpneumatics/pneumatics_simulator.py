@@ -131,7 +131,7 @@ class PneumaticsSimulator(attcpip.AtSimulator):
         cell_vents_open_time: float = 1.0,
         m1_pressure: float = 5.0,
         m2_pressure: float = 6.0,
-        main_pressure: float = 10.0,
+        main_pressure: float = 300000.0,
         cell_load: float = 100.0,
     ) -> None:
         """Set configuration.
