@@ -21,7 +21,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import asyncio
 import logging
 
 from lsst.ts.atpneumatics import run_atpneumatics
@@ -32,4 +31,4 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("httpcore.http11").setLevel(logging.INFO)
 logging.getLogger("httpcore.connection").setLevel(logging.INFO)
 
-asyncio.run(run_atpneumatics())
+run_atpneumatics()
