@@ -87,6 +87,7 @@ class PneumaticsSimulator(attcpip.AtSimulator):
         self.m2_pressure = 0.0
         self.m2_state = AirValveState.CLOSED
         self.main_valve_state = AirValveState.CLOSED
+        self.main_pressure = 0.0
         self.power_status = PowerStatus()
 
         # Configuration items.
@@ -169,7 +170,7 @@ class PneumaticsSimulator(attcpip.AtSimulator):
         self.m1_covers_open_time = m1_covers_open_time
         self.cell_vents_close_time = cell_vents_close_time
         self.cell_vents_open_time = cell_vents_open_time
-        self.main_air_source_pressure.pressure = main_pressure
+        self.main_pressure = main_pressure
         self.load_cell.cellLoad = cell_load
 
     async def initialize(self) -> None:
@@ -425,6 +426,11 @@ class PneumaticsSimulator(attcpip.AtSimulator):
                 self.m2_air_pressure.pressure = self.m2_pressure
             else:
                 self.m2_air_pressure.pressure = 0
+
+            if main_valve_open and self.main_valve_state == opened_state:
+                self.main_air_source_pressure.pressure = self.main_pressure
+            else:
+                self.main_air_source_pressure.pressure = 0
 
             await self._write_telemetry(
                 tel_id=Telemetry.M1_AIR_PRESSURE,
