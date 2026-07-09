@@ -8,6 +8,16 @@ Version History
 
 .. towncrier release notes start
 
+v2.1.5 (2026-07-09)
+===================
+
+Performance Enhancement
+-----------------------
+
+- Made sure that main air pressure drops to 0 when the main air valve is closed. (`OSW-2677 <https://rubinobs.atlassian.net//browse/OSW-2677>`_)
+- Fixed asyncio error in run script. (`OSW-2677 <https://rubinobs.atlassian.net//browse/OSW-2677>`_)
+
+
 v2.1.4 (2026-07-07)
 ===================
 
